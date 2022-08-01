@@ -1,5 +1,6 @@
 package com.example.workmanagerassignment.network
 
+import com.example.workmanagerassignment.models.UserDataItem
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

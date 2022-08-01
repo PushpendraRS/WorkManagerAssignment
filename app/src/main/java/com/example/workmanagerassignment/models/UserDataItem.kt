@@ -1,4 +1,4 @@
-package com.example.workmanagerassignment.network
+package com.example.workmanagerassignment.models
 
 data class UserDataItem(
     val body: String,

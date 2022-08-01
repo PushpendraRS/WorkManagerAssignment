@@ -1,15 +1,14 @@
-package com.example.workmanagerassignment
+package com.example.workmanagerassignment.workmanager
 
 import android.content.Context
 import android.util.Log
 import androidx.work.Worker
 import androidx.work.WorkerParameters
+import com.example.workmanagerassignment.Utils
 import com.example.workmanagerassignment.db.AppDatabase
 import com.example.workmanagerassignment.db.UserEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.forEach
 import kotlinx.coroutines.launch
 
 class DatabaseManager(private val context: Context,params: WorkerParameters) : Worker(context,params) {

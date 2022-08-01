@@ -1,14 +1,12 @@
-package com.example.workmanagerassignment
+package com.example.workmanagerassignment.workmanager
 
 import android.content.Context
-import android.util.Log
 import androidx.work.*
+import com.example.workmanagerassignment.Constants
+import com.example.workmanagerassignment.Utils
 import com.example.workmanagerassignment.network.ApiInterface.Companion.instance
-import com.example.workmanagerassignment.network.UserDataItem
-import com.google.gson.Gson
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.example.workmanagerassignment.models.UserDataItem
+import com.example.workmanagerassignment.showNotification
 
 class NetworkManager(private val context : Context, private val params: WorkerParameters) : CoroutineWorker(context,params){
     override suspend fun doWork(): Result {

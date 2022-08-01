@@ -6,7 +6,7 @@ import android.content.Context
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import com.example.workmanagerassignment.network.UserDataItem
+import com.example.workmanagerassignment.models.UserDataItem
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class Utils {

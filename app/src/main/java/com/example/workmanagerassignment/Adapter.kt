@@ -5,8 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.workmanagerassignment.databinding.ItemUserDataBinding
-import com.example.workmanagerassignment.db.UserEntity
-import com.example.workmanagerassignment.network.UserDataItem
+import com.example.workmanagerassignment.models.UserDataItem
 
 class Adapter(private val list : ArrayList<UserDataItem>) : RecyclerView.Adapter<Adapter.ViewHolder>(){
 
