@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.workmanagerassignment.databinding.ItemUserDataBinding
 import com.example.workmanagerassignment.models.UserDataItem
 
-class Adapter(private val list : ArrayList<UserDataItem>) : RecyclerView.Adapter<Adapter.ViewHolder>(){
+class Adapter(private var list : ArrayList<UserDataItem>) : RecyclerView.Adapter<Adapter.ViewHolder>(){
 
     class ViewHolder(val binding : ItemUserDataBinding) : RecyclerView.ViewHolder(binding.root) {}
 
@@ -32,4 +32,10 @@ class Adapter(private val list : ArrayList<UserDataItem>) : RecyclerView.Adapter
     }
 
     override fun getItemCount() = list.size
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateList(list : ArrayList<UserDataItem>){
+        this.list = list
+        notifyDataSetChanged()
+    }
 }

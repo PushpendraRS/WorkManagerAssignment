@@ -26,7 +26,8 @@ class MainActivity : AppCompatActivity() {
        going to repeat itself after 15 mins. You can use any UI or foreground
        notification to display the changes---> Periodic Request  */
 
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var binding : ActivityMainBinding
+    private lateinit var adapter : Adapter
     private val db: Dao
         get() = AppDatabase.getDatabase(this).getDao()
 
@@ -35,6 +36,7 @@ class MainActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         setAdapter()
+        setObserver()
         setClickListener()
     }
 
@@ -78,12 +80,8 @@ class MainActivity : AppCompatActivity() {
             .then(dbWork)
             .enqueue()
 
-        worker.getWorkInfosByTagLiveData("oneTimeWork").observe(this) {
-
-            val networkStatus = it.find {
-                it.id == networkRequest.id
-            }
-            when (networkStatus?.state) {
+        worker.getWorkInfoByIdLiveData(networkRequest.id).observe(this) {
+            when (it?.state) {
                 WorkInfo.State.RUNNING -> {
                     binding.txtStatus.text = "Network Worker Running"
                 }
@@ -103,12 +101,8 @@ class MainActivity : AppCompatActivity() {
                 else -> {}
             }
 
-            worker.getWorkInfosByTagLiveData("oneTimeDbWork").observe(this) {
-                val dbStatus = it.find {
-                    it.id == dbWork.id
-                }
-
-                when (dbStatus?.state) {
+            worker.getWorkInfoByIdLiveData(dbWork.id).observe(this) {
+                when (it?.state) {
                     WorkInfo.State.RUNNING -> {
                         binding.txtStatus.text = "Database Worker Running"
                     }
@@ -132,6 +126,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    @SuppressLint("SetTextI18n")
     private fun setPeriodicWorker() {
         val constraints     = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
         val data            = Data.Builder().putString(Constants.WORKER_TYPE, "Periodic Request")
@@ -145,12 +140,8 @@ class MainActivity : AppCompatActivity() {
         val worker = WorkManager.getInstance(this)
             worker.enqueue(periodicRequest)
 
-        worker.getWorkInfosByTagLiveData("periodicWork").observe(this){
-            val periodicWork = it.find {
-                it.id == periodicRequest.id
-            }
-
-            when (periodicWork?.state) {
+        worker.getWorkInfoByIdLiveData(periodicRequest.id).observe(this){
+            when (it?.state) {
                 WorkInfo.State.RUNNING -> {
                     binding.txtStatus.text = "Periodic Worker Running"
                 }
@@ -169,18 +160,21 @@ class MainActivity : AppCompatActivity() {
                 else -> {}
             }
         }
+    }
 
-
+    private fun setObserver(){
+        lifecycleScope.launch {
+            Utils.data.collect {
+                Log.d("TAG", "setAdapter: updated")
+                adapter.updateList(it)
+            }
+        }
     }
 
 
     private fun setAdapter() {
+        adapter = Adapter(arrayListOf())
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
-        lifecycleScope.launch {
-            Utils.data.collect {
-                Log.d("TAG", "setAdapter: updated")
-                binding.recyclerView.adapter = Adapter(it)
-            }
-        }
+        binding.recyclerView.adapter = adapter
     }
 }
